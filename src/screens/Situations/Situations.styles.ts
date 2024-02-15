@@ -1,6 +1,13 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
 
 export const SituationsStyles = StyleSheet.create({
+  section: {
+    height: height,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -72,15 +79,33 @@ export const SituationsStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 25,
+  },
+  backgroundImage: {
+    width: 40,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageStyle: {
+    position: 'relative',
+    top: height - 880,
+    left: width - 250,
+    width: 30,
+    height: 25,
+    zIndex: 10,
+    resizeMode: 'contain',
+    borderRadius: 5,
   },
   input: {
     fontFamily: 'Montserrat',
-    width: '100%',
+    width: width - 30,
+    height: 50,
     borderStyle: 'solid',
     borderColor: '#000',
     borderRadius: 100,
     paddingLeft: 15,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgb(255,255,255)',
+    color: '#000',
   },
 });
