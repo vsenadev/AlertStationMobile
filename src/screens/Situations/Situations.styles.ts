@@ -7,6 +7,7 @@ export const SituationsStyles = StyleSheet.create({
   section: {
     height: height,
     backgroundColor: '#fff',
+    paddingBottom: 120,
   },
   container: {
     flex: 1,
@@ -15,7 +16,7 @@ export const SituationsStyles = StyleSheet.create({
     width: '100%',
     height: '10%',
     paddingHorizontal: 10,
-    paddingTop: 10,
+    paddingTop: 25,
     backgroundColor: '#fff',
   },
   logo: {
@@ -79,7 +80,8 @@ export const SituationsStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 20,
+    marginBottom: 60,
   },
   backgroundImage: {
     width: 40,
@@ -107,5 +109,49 @@ export const SituationsStyles = StyleSheet.create({
     paddingLeft: 15,
     backgroundColor: 'rgb(255,255,255)',
     color: '#000',
+  },
+  trainInfo: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  boxTrain: {
+    flexDirection: 'row',
+    width: width - 30,
+    height: 70,
+    backgroundColor: '#ffffff',
+    marginBottom: 15,
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  lineInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  lineBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 3,
+  },
+  lineNumber: {
+    fontFamily: 'Montserrat',
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  lineName: {
+    fontFamily: 'Montserrat',
+    color: '#000',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  lineStatus: {
+    flexDirection: 'row',
+    gap: 10,
   },
 });

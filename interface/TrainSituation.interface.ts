@@ -7,4 +7,6 @@ export interface IInfo {
   codigo: number;
   id: number;
   situacao: string;
+  nome: string;
+  cor: string;
 }
