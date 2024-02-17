@@ -12,6 +12,7 @@ import {SituationsStyles} from './Situations.styles.ts';
 import http from '../../../environments/environment.ts';
 import Rain from '../../../assets/images/rain.svg';
 import ArrowDown from '../../../assets/images/arrowdown.svg';
+import ArrowUp from '../../../assets/images/arrowup.svg';
 import {IInfo} from '../../../interface/TrainSituation.interface.ts';
 
 export default function Situations() {
@@ -22,15 +23,28 @@ export default function Situations() {
     max: 0,
   });
   const [search, setSearch] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [situationInfo, setSituationInfo] = useState({
+    modificado: '',
+    descricao: '',
+  });
 
   async function getMeteorology() {
-    await http.get('meteorology').then(res => setMeteorology(res.data));
+    await http
+      .get('meteorology')
+      .then(res => setMeteorology(res.data));
   }
 
   async function getTrainsSituations() {
     await http
       .get('train/situations')
       .then(res => setTrainsSituation(res.data));
+  }
+
+  async function getTrainSituationWithId (line: number) {
+    await http
+      .get(`train/situation/${line}`)
+      .then((res) => {console.log(res.data) ,setSituationInfo(res.data)});
   }
 
   useEffect(() => {
@@ -46,7 +60,7 @@ export default function Situations() {
   const Item = ({item}: {item: IInfo}) => {
     return (
       <View style={SituationsStyles.trainInfo}>
-        <View style={[SituationsStyles.boxTrain, SituationsStyles.shadowProp]}>
+        <View style={[SituationsStyles.boxTrain, SituationsStyles.shadowProp, isOpen&&({height: 280})]}>
           <View style={SituationsStyles.lineInfo}>
             <View
               style={[SituationsStyles.lineBox, {backgroundColor: item.cor}]}>
@@ -63,14 +77,19 @@ export default function Situations() {
               }>
               {item.situacao}
             </Text>
-            {item.situacao !== 'Operação Normal' &&
-              item.situacao !== 'Operações Encerradas' &&
-              item.situacao !== 'Operação Encerrada' && (
-                <TouchableOpacity>
-                  <ArrowDown />
+            {item.situacao !== 'Operação Normal' && item.situacao !== 'Operações Encerradas' && item.situacao !== 'Operação Encerrada' && (
+                <TouchableOpacity onPress={() => {setIsOpen(!isOpen), getTrainSituationWithId(item.codigo)}}>
+                  { isOpen ? (<ArrowUp />) : (  <ArrowDown />) }
                 </TouchableOpacity>
               )}
           </View>
+          {
+            isOpen && (
+              <View>
+                <Text>{situationInfo.descricao}</Text>
+              </View>
+            )
+          }
         </View>
       </View>
     );
