@@ -10,8 +10,8 @@ import Search from './Search/index.tsx';
 
 export default function Situations() {
   const [trainsSituations, setTrainsSituation] = useState([]);
+  const [expanded, setExpanded] = useState(false);
   const [search, setSearch] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
   const [situationInfo, setSituationInfo] = useState({
     modificado: '',
     descricao: '',
@@ -24,10 +24,12 @@ export default function Situations() {
       .then(res => setTrainsSituation(res.data));
   }
 
-  async function getTrainSituationWithId(line: number) {
-    await http.get(`train/situation/${line}`).then(res => {
-      console.log(res.data), setSituationInfo(res.data);
-    });
+  async function getTrainSituationWithId() {
+    if (lineSelected !== 0) {
+      await http.get(`train/situation/${lineSelected}`).then(res => {
+        setSituationInfo(res.data);
+      });
+    }
   }
 
   useEffect(() => {
@@ -39,122 +41,22 @@ export default function Situations() {
     element.nome.toLowerCase().includes(lowerSearch),
   );
 
-  const dados = [
-    {
-      _id: '65ce826296c7e24fda2b1b8b',
-      codigo: 1,
-      id: 6203400257536000,
-      situacao: 'Operação Paralisada',
-      cor: '#00378C',
-      nome: 'Azul',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1ba0',
-      codigo: 2,
-      id: 4868240048128000,
-      situacao: 'Operação Normal',
-      cor: '#186D55',
-      nome: 'Verde',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1bab',
-      codigo: 3,
-      id: 6304350141939712,
-      situacao: 'Operação Normal',
-      cor: '#F51200',
-      nome: 'Vermelha',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1bb6',
-      codigo: 4,
-      id: 4660844667338752,
-      situacao: 'Operação Normal',
-      cor: '#EFBA00',
-      nome: 'Amarela',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1bcb',
-      codigo: 5,
-      id: 6242654547345408,
-      situacao: 'Operação Normal',
-      cor: '#9271B1',
-      nome: 'Lilás',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1bd8',
-      codigo: 7,
-      id: 6035571155664896,
-      situacao: 'Operação Normal',
-      cor: '#C80857',
-      nome: 'Rubi',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1be8',
-      codigo: 8,
-      id: 4789654494642176,
-      situacao: 'Operação Normal',
-      cor: '#949488',
-      nome: 'Diamante',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1bfa',
-      codigo: 9,
-      id: 6242285985464320,
-      situacao: 'Operação Normal',
-      cor: '#219896',
-      nome: 'Esmeralda',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1c08',
-      codigo: 10,
-      id: 6197029378195456,
-      situacao: 'Operação Normal',
-      cor: '#1B85A5',
-      nome: 'Turquesa',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1c14',
-      codigo: 11,
-      id: 4837130861805568,
-      situacao: 'Operação Normal',
-      cor: '#F46C55',
-      nome: 'Coral',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1c1f',
-      codigo: 12,
-      id: 4788027641561088,
-      situacao: 'Operação Normal',
-      cor: '#1F2086',
-      nome: 'Safira',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1c2e',
-      codigo: 13,
-      id: 4899279843885056,
-      situacao: 'Operação Normal',
-      cor: '#29B352',
-      nome: 'Jade',
-    },
-    {
-      _id: '65ce826296c7e24fda2b1c3d',
-      codigo: 15,
-      id: 5970941796417536,
-      situacao: 'Operação Normal',
-      cor: '#848D90',
-      nome: 'Prata',
-    },
-  ];
-
-  const [expanded, setExpanded] = useState(false);
-
   const Item = ({item}: {item: IInfo}) => {
     return (
       <View
         style={[SituationsStyles.containerLine, SituationsStyles.shadowProp]}>
         <TouchableOpacity
           style={SituationsStyles.titleContainer}
-          onPress={() => setExpanded(!expanded)}>
+          disabled={
+            item.situacao === 'Operação Normal' ||
+            item.situacao === 'Operação Encerradaddd' ||
+            item.situacao === 'Operações Encerradasddd'
+          }
+          onPress={() => {
+            setExpanded(!expanded);
+            setLineSelected(item.codigo);
+            getTrainSituationWithId();
+          }}>
           <View style={SituationsStyles.div}>
             <View
               style={[SituationsStyles.boxColor, {backgroundColor: item.cor}]}>
@@ -177,9 +79,14 @@ export default function Situations() {
             {item.situacao}
           </Text>
         </TouchableOpacity>
-        {expanded && (
+        {expanded && lineSelected === item.codigo && (
           <View style={SituationsStyles.contentContainer}>
-            <Text style={SituationsStyles.content}>{item.situacao}</Text>
+            <Text style={SituationsStyles.time}>
+              {situationInfo.modificado}
+            </Text>
+            <Text style={SituationsStyles.content}>
+              {situationInfo.descricao}
+            </Text>
           </View>
         )}
       </View>
@@ -189,7 +96,7 @@ export default function Situations() {
   return (
     <View style={SituationsStyles.section}>
       <FlatList
-        data={dados}
+        data={linesFilter}
         renderItem={Item}
         keyExtractor={({codigo}: {codigo: number}) => codigo.toString()}
         ListHeaderComponent={() => {
