@@ -103,6 +103,7 @@ export const SituationsStyles = StyleSheet.create({
   },
   code: {
     color: '#FFF',
+    fontWeight: '700',
   },
   title: {
     fontSize: 16,
@@ -112,13 +113,20 @@ export const SituationsStyles = StyleSheet.create({
     paddingLeft: 10,
   },
   contentContainer: {
-    padding: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    gap: 10,
   },
   content: {
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: 'Montserrat',
+    color: '#000',
   },
   situation: {
     marginLeft: 100,
-    // textAlign: 'right',
+  },
+  time: {
+    fontFamily: 'Montserrat',
+    color: 'rgba(0,0,0,0.56)',
   },
 });
