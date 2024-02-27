@@ -25,10 +25,17 @@ export default function Situations() {
   }
 
   async function getTrainSituationWithId() {
-    if (lineSelected !== 0) {
-      await http.get(`train/situation/${lineSelected}`).then(res => {
+    if (lineSelected !== 0 && expanded) {
+      await http.get(`train/situations/${lineSelected}`).then(res => {
         setSituationInfo(res.data);
       });
+    }
+  }
+
+  async function changeExpandedAndCallSituationWithId(line: number) {
+    if (expanded) {
+      setLineSelected(line);
+      await getTrainSituationWithId();
     }
   }
 
@@ -49,13 +56,12 @@ export default function Situations() {
           style={SituationsStyles.titleContainer}
           disabled={
             item.situacao === 'Operação Normal' ||
-            item.situacao === 'Operação Encerradaddd' ||
-            item.situacao === 'Operações Encerradasddd'
+            item.situacao === 'Operação Encerrada' ||
+            item.situacao === 'Operações Encerradas'
           }
-          onPress={() => {
-            setExpanded(!expanded);
-            setLineSelected(item.codigo);
-            getTrainSituationWithId();
+          onPress={async () => {
+            expanded ? setExpanded(false) : setExpanded(true);
+            await changeExpandedAndCallSituationWithId(item.codigo);
           }}>
           <View style={SituationsStyles.div}>
             <View
